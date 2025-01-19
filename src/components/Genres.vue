@@ -18,6 +18,7 @@ const addToCart = (movie) => {
     release_date: movie.release_date,
     vote_average: movie.vote_average,
   });
+  localStorage.setItem(`cart_${store.user.email}`, JSON.stringify(Object.fromEntries(store.cart)));
 };
 
 async function getMovieByGenre() {

@@ -6,8 +6,15 @@ import { useRouter } from 'vue-router';
 const store = useStore();
 const router = useRouter();
 
+if (store.user !== null) {
+const displayName = store.user.displayName;
+console.log(displayName)
+}
+
 const logout = () => {
+  store.user = null;
   router.push('/');
+  signOut(auth);
   store.$reset();
 };
 </script>
@@ -18,7 +25,7 @@ const logout = () => {
       <img src="/src/assets/logo.png" class="logo" />
     </RouterLink>
     <ul>
-      <div v-if="store.email">
+      <div v-if="store.user">
         <li class="welcome-message">
           Welcome, {{ store.firstName }}!
         </li>
@@ -29,10 +36,10 @@ const logout = () => {
       <li><a href="">TV Shows</a></li>
       <li><a href="">Actors</a></li>
 
-      <li v-if="!store.email">
+      <li v-if="!store.user">
         <RouterLink to="/register" class="entry">SIGN UP</RouterLink>
       </li>
-      <li v-if="!store.email">
+      <li v-if="!store.user">
         <RouterLink to="/login" class="entry">SIGN IN</RouterLink>
       </li>
 

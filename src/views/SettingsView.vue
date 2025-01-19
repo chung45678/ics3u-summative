@@ -2,7 +2,9 @@
 import Footer from '../components/Footer.vue';
 import Header from '../components/Header.vue';
 import { useStore } from '../store';
-import { ref } from 'vue';
+import { updateProfile, updatePassword } from 'firebase/auth';
+import { auth } from "../firebase";
+import { ref, onMounted} from 'vue';
 
 const store = useStore();
 const firstName = ref(store.firstName ? store.firstName : '');

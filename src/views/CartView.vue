@@ -9,15 +9,13 @@ const store = useStore();
 
 const message = ref(false);
 
-const checkout = () => {
-    store.cart = null;
-    localStorage.clear();
-    message.value = true;
-    onBeforeRouteLeave(() => {
-        showMessage.value = false;
-    });
+function checkout() {
+    if (store.cart.size >= 1) {
+        store.cart.clear()
+        localStorage.clear(`cart_${store.user.email}`);
+        alert("Thank you for your purchase!")
+    }
 }
-
 </script>
 
 <template>

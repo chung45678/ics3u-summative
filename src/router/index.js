@@ -6,6 +6,7 @@ import MoviesView from '../views/MoviesView.vue';
 import DetailView from '../views/DetailsView.vue';
 import SettingsView from '../views/SettingsView.vue';
 import CartView from '../views/CartView.vue';
+import { userAuthorized, useStore } from '../store';
 
 const routes = [
   { path: '/', component: HomeView },
@@ -21,5 +22,17 @@ const router = createRouter({
   history: createWebHistory(),
   routes,
 })
+
+router.beforeEach((to, from, next) => {
+  userAuthorized.then(() => {
+    const store = useStore();
+
+    if (!store.user && to.meta.auth) {
+      next("/login");
+    } else {
+      next();
+    }
+  });
+});
 
 export default router;
