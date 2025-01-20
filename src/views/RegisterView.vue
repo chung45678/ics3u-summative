@@ -13,11 +13,10 @@ const email = ref('');
 const firstName = ref('');
 const lastName = ref('');
 const password = ref('');
-const password2 = ref('');
+const confPassword = ref('');
 
-const handleRegister = () => {
-  event.preventDefault();
-
+async function handleRegister() {
+  console.log(firstName, lastName, password, email)
   if (!firstName.value) {
     alert('First Name is required.');
   } else if (!lastName.value) {
@@ -31,12 +30,14 @@ const handleRegister = () => {
   } else if (password.value !== confPassword.value) {
     alert('Passwords do not match.');
   } else {
-    store.email = email.value
-    store.password = password.value
-    store.firstName = firstName.value
-    store.lastName = lastName.value
-    store.password = password.value
-    router.push("/movies");
+    try {
+      const user = (await createUserWithEmailAndPassword(auth, email.value, password.value)).user;
+      await updateProfile(user, { displayName: `${firstName.value} ${lastName.value}` });
+      store.user = user;
+      router.push("/movies");
+    } catch (error) {
+      alert("There was an error creating a user with email!");
+    }
   }
 };
 
@@ -56,18 +57,15 @@ async function registerByGoogle() {
     <form class="login" @submit.prevent="handleRegister">
       <input required v-model="firstName" placeholder = "First Name">
       <input required v-model="lastName" placeholder = "Last Name">
-      <input required v-model="username" placeholder = "Username">
       <input type="email" required v-model="email" placeholder = "E-mail">
       <input type="password" required v-model="password" placeholder = "Password">
       <input type="password" required v-model="confPassword" placeholder = "Confirm your password">
-      <button type="register">Sign-up</button>
+      <button type="submit">Sign-up</button>
       <button @click="registerByGoogle()" class="long-button">Register by Google</button>
     </form>
-    
   </div>
   <Footer />
 </template>
-
 
 <style scoped>
 .hero {
@@ -122,7 +120,7 @@ form.login input:focus {
   box-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
 }
 
-form.login button[type="register"] {
+form.login button[type="submit"] {
   width: 100%;
   padding: 10px;
   background-color: #ff0000;
@@ -135,7 +133,7 @@ form.login button[type="register"] {
   transition: background-color 0.3s ease;
 }
 
-form.login button[type="register"]:hover {
+form.login button[type="submit"]:hover {
   background-color: darkred;
 }
 </style>

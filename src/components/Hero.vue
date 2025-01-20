@@ -3,7 +3,7 @@
           <div class="info">
               <h1>Endless Entertainment, Made Just for You</h1>
               <p>Stream the best movies and TV shows on any device, anytime, anywhere. Experience the magic of entertainment tailored to your taste.</p>
-              <RouterLink to="/register" class = "entry">Get Started</RouterLink>\
+              <RouterLink to="/register" class = "entry">Get Started</RouterLink>
           </div>
       </div>
   </template>

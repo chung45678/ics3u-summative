@@ -9,25 +9,31 @@ const store = useStore();
 
 const message = ref(false);
 
+function itemDelete(key) {
+    store.cart.delete(key);
+    localStorage.setItem(`cart_${store.user.email}`, JSON.stringify(Object.fromEntries(store.cart)))
+};
+
 function checkout() {
     if (store.cart.size >= 1) {
         store.cart.clear()
         localStorage.clear(`cart_${store.user.email}`);
         alert("Thank you for your purchase!")
     }
-}
+};
+
 </script>
 
 <template>
     <Header />
     <div class="cart">
         <h1>Shopping Cart</h1>
+        <button v-if="store.cart.size != 0" @click="checkout">Checkout</button>
         <div class="item" v-for="([key, value]) in store.cart">
             <img :src="`https://image.tmdb.org/t/p/w500${value.url}`" />
             <h1>{{ value.title }}</h1>
-            <button @click="store.cart.delete(key)">Remove</button>
+            <button @click="itemDelete(key)">Remove</button>
         </div>
-        <button @click="checkout">Checkout</button>
         <div class="message" v-if="message">Thank you for Shopping!</div>
     </div>
     <Footer />
