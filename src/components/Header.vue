@@ -2,7 +2,8 @@
 import { RouterLink } from 'vue-router';
 import { useStore } from '../store';
 import { useRouter } from 'vue-router';
-
+import { signOut } from 'firebase/auth';
+import { auth } from '@/firebase';
 const store = useStore();
 const router = useRouter();
 
@@ -15,7 +16,6 @@ const logout = () => {
   store.user = null;
   router.push('/');
   signOut(auth);
-  store.$reset();
 };
 </script>
 
@@ -27,7 +27,7 @@ const logout = () => {
     <ul>
       <div v-if="store.user">
         <li class="welcome-message">
-          Welcome, {{ store.firstName }}!
+          Welcome, {{store.user.displayName }}!
         </li>
       </div>
       <li>

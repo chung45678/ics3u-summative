@@ -1,20 +1,35 @@
 <script setup>
-import Footer from '../components/Footer.vue';
 import Header from '../components/Header.vue';
+import Footer from '../components/Footer.vue';
 import { useStore } from '../store';
-import { updateProfile, updatePassword } from 'firebase/auth';
-import { auth } from "../firebase";
-import { ref, onMounted} from 'vue';
+import { ref } from 'vue';
+import { getAuth, updateProfile, updatePassword } from 'firebase/auth';
 
-const store = useStore();
-const firstName = ref(store.firstName ? store.firstName : '');
-const lastName = ref(store.lastName ? store.lastName : '');
+const auth = getAuth();
+const store = useStore()
+const user = auth.currentUser;
+const firstName = ref(user?.displayName?.split(' ')[0] || '');
+const lastName = ref(user?.displayName?.split(' ')[1] || '');
+const password = ref('');
 
-const saveChanges = () => {
-  store.firstName = firstName.value;
-  store.lastName = lastName.value;
-  alert('Changes saved!');
+async function saveChanges() {
+  if (user) {
+    try {
+      await updateProfile(user, { displayName: `${firstName.value} ${lastName.value}` });
+
+      if (password.value) {
+        await updatePassword(user, password.value);
+      }
+
+      store.user = user;
+      alert('Changes saved!');
+      location.reload();
+    } catch (error) {
+      alert("There was an error changing your settings!");
+    }
+  }
 };
+
 </script>
 
 <template>
@@ -27,8 +42,8 @@ const saveChanges = () => {
         <input v-model="firstName" id="firstName" type="text" placeholder="First Name" class="input-field" />
         <label for="lastName">Change Last Name:</label>
         <input v-model="lastName" id="lastName" type="text" placeholder="Last Name" class="input-field" />
-        <label for="email">Email:</label>
-        <input id="email" type="email" v-model="store.email" readonly placeholder="Email" class="input-field" />
+        <label for="password">Change Password:</label>
+        <input v-model="password" id="password" type="password" placeholder="Password" class="input-field" />
         <button @click="saveChanges" class="button login">Save Changes</button>
       </div>
     </div>

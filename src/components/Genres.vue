@@ -11,7 +11,7 @@ const selectedGenre = ref(12);
 const response = ref(null);
 
 const addToCart = (movie) => {
-  store.cart.set(movie.id, {
+  store.cart.set(String(movie.id), {
     title: movie.title,
     url: movie.poster_path,
     overview: movie.overview,
@@ -55,7 +55,7 @@ onMounted(async () => {
         <h3>{{ movie.title }}</h3>
         <p>Release Date: {{ movie.release_date }}</p>
         <button @click.stop="addToCart(movie)" class="buy-button">
-          {{ store.cart.has(movie.id) ? 'Added' : 'Buy' }}
+          {{ store.cart.has(String(movie.id)) ? 'Added' : 'Buy' }}
         </button>
       </div>
     </div>

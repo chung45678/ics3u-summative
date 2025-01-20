@@ -9,13 +9,13 @@ import CartView from '../views/CartView.vue';
 import { userAuthorized, useStore } from '../store';
 
 const routes = [
-  { path: '/', component: HomeView },
-  { path: '/register', component: RegisterView },
-  { path: '/login', component: LoginView },
-  { path: '/movies', component: MoviesView },
-  { path: '/movies/:id', component: DetailView },
-  { path: '/settings', component: SettingsView},
-  { path: '/cart', component: CartView}
+  { path: '/',  meta: { auth: false }, component: HomeView },
+  { path: '/register',  meta: { auth: false }, component: RegisterView },
+  { path: '/login',  meta: { auth: false }, component: LoginView },
+  { path: '/movies', meta: { auth: true }, component: MoviesView },
+  { path: '/movies/:id', meta: { auth: true }, component: DetailView },
+  { path: '/settings', meta: { auth: true },component: SettingsView},
+  { path: '/cart', meta: { auth: true }, component: CartView}
 ]
 
 const router = createRouter({
